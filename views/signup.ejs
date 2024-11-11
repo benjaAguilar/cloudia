@@ -7,6 +7,7 @@
 </head>
 <body>
     <h1>SignUp on Cloudia</h1>
+    <%- include("partials/errors.ejs") %>
     <form action="/signup" method="post">
         <label for="email">Email</label>
         <input type="email" name="email" id="email">
@@ -16,6 +17,8 @@
 
         <label for="password">Repeat password</label>
         <input type="password" name="r-password" id="r-password">
+
+        <input type="submit" value="Sign Up">
     </form>
 </body>
 </html>
