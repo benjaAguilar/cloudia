@@ -38,9 +38,23 @@ const postLogUser = passport.authenticate('local', {
     failureRedirect: '/login'
 });
 
+const getLogOutUser = (req, res, next) => {
+    if(!res.locals.isAuth){
+        return res.redirect('/');
+    }
+
+    req.logout((err) => {
+        if(err) return next(new Errors.customError('Error logging Out, try again', 500));
+        req.session.feedback = 'Logged Out successfully';
+
+        res.redirect('/');
+    })
+}
+
 const userController = {
     postCreateUser,
-    postLogUser
+    postLogUser,
+    getLogOutUser
 }
 
 export default userController;
