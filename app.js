@@ -4,13 +4,13 @@ import dotenv from 'dotenv';
 
 import session from 'express-session';
 import pgSession from 'connect-pg-simple';
-import passport from 'passport';
+import passport from './config/passport.js';
 
 import prisma from './db/prismaClient.js';
 import pkg from 'pg';
 const { Pool } = pkg;
 import indexRouter from './routes/indexRoute.js';
-import './config/passport.js'
+import errorHandler from './controllers/errorHandler.js';
 
 dotenv.config();
 
@@ -65,6 +65,8 @@ process.on('SIGTERM', async () => {
     await prisma.$disconnect();
     process.exit(0);
 });
+
+app.use(errorHandler);
 
 const PORT = 3000;
 app.listen(PORT, () => console.log(`Server running on ${PORT}`));
