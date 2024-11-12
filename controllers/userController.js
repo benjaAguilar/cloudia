@@ -1,10 +1,14 @@
 import { validationResult } from "express-validator";
 import validations from "../config/validator.js";
 import bcrypt from 'bcryptjs';
+import passport from "../config/passport.js";
 import db from "../db/queries.js";
+import tryCatch from '../utils/tryCatch.js';
+import Errors from '../utils/customError.js';
 
 const postCreateUser = [
     validations.validateCreateUser,
+    tryCatch(
     async (req, res, next) => {
         const validationErrors = validationResult(req);
         if(!validationErrors.isEmpty()){
@@ -18,7 +22,7 @@ const postCreateUser = [
 
         bcrypt.hash(password, 10, async (err, hashedPassword) => {
             if(err) {
-                return next(new Error());
+                return next(new Errors.customError('Error creating user, please try again', 500));
             }
 
             await db.createUser(email, hashedPassword);
@@ -26,12 +30,13 @@ const postCreateUser = [
             
             res.redirect('/login');
         });
-    }
+    })
 ]
 
-async function postLogUser(req, res, next){
-    
-}
+const postLogUser = passport.authenticate('local', {
+    successRedirect: '/mystorage',
+    failureRedirect: '/login'
+});
 
 const userController = {
     postCreateUser,
