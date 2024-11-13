@@ -40,11 +40,31 @@ async function getMyStorage(req, res, next) {
     });
 }
 
+async function getFolder(req, res, next){
+    if(!res.locals.isAuth){
+        return res.redirect('/');
+    }
+
+    const ownerId = res.locals.currentUser.id;
+    const folderId = parseInt(req.params.folderId);
+
+    const folder = await db.getFolderById(folderId, ownerId);
+    console.dir(folder);
+
+    res.render('mystorage', { 
+        folderId: folder.id,
+        files: folder.files,
+        subfolders: folder.subfolders, 
+        folderName: folder.name 
+    });
+}
+
 const indexController = {
     getIndex,
     getSignUp,
     getLogIn,
-    getMyStorage
+    getMyStorage,
+    getFolder
 };
 
 export default indexController;
