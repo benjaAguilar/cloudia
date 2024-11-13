@@ -7,5 +7,15 @@
 </head>
 <body>
     <h1>Welcome user</h1>
+    <form action="/mystorage/uploadfile/<%= folderId %>" method="post" enctype="multipart/form-data">
+        <input type="file" name="files" id="files" multiple>
+        <input type="submit" value="Upload">
+    </form>
+    <div>
+        <h2>Main</h2>
+        <% locals.files.forEach(file => { %>
+            <a href="<%= file.filePath %>"><%= file.name %></a> 
+       <% }); %>
+    </div>
 </body>
 </html>
