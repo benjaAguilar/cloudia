@@ -8,13 +8,34 @@
 <body>
     <h1>Welcome user</h1>
     <form action="/mystorage/uploadfile/<%= folderId %>" method="post" enctype="multipart/form-data">
+        <h3>Upload File</h3>
         <input type="file" name="files" id="files" multiple>
         <input type="submit" value="Upload">
     </form>
+    <!-- Create folder with his parent folder id as a param -->
+    <form action="/createFolder/<%= folderId %>" method="post">
+        <h3>Create Folder</h3>
+        <label for="foldername">Folder Name</label>
+        <input type="text" name="foldername" id="foldername" placeholder="my fancy folder">
+        <input type="submit" value="Create">
+    </form>
     <div>
-        <h2>Main</h2>
+        <h2>Folder <%= folderName  %></h2>
+        <% locals.subfolders.forEach(folder => { %>
+            <div>
+                <a href="/folder/<%= folder.id %>"><%= folder.name %></a>
+                <form action="/deleteFolder/<%= folder.id %>" method="post">
+                    <input type="submit" value="delete">
+                </form>
+            </div>
+            <% }); %>
         <% locals.files.forEach(file => { %>
-            <a href="<%= file.filePath %>"><%= file.name %></a> 
+            <div>
+                <a href="<%= file.filePath %>"><%= file.name %></a>
+                <form action="/deleteFile/<%= file.id %>" method="post">
+                    <input type="submit" value="delete">
+                </form>
+            </div>
        <% }); %>
     </div>
 </body>
