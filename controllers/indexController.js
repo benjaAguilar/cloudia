@@ -1,3 +1,5 @@
+import db from "../db/queries.js";
+
 async function getIndex(req, res, next){
     if(res.locals.isAuth){
         return res.redirect('/mystorage');
@@ -26,8 +28,11 @@ async function getMyStorage(req, res, next) {
     if(!res.locals.isAuth){
         return res.redirect('/');
     }
+    const userId = res.locals.currentUser.id;
 
-    res.render('mystorage');
+    const folder = await db.getMainFolder(userId);
+
+    res.render('mystorage', { folderId: folder.id, files: folder.files, subfolders: folder.subfolders });
 }
 
 const indexController = {
