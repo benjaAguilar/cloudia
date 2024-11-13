@@ -9,9 +9,17 @@ const documents = [
     "application/vnd.openxmlformats-officedocument.presentationml.presentation"
 ];
 
+async function postCreateFolder(req, res, next){
+    const ownerId = res.locals.currentUser.id;
+    const parentId = parseInt(req.params.parentId);
+    const { foldername } = req.body;
+
+    await db.createFolder(foldername, parentId, ownerId);
+
+    res.redirect('/mystorage');
+}
+
 async function postCreateFile(req, res, next){
-    console.log(req.files);
-    console.log("MIME:" + req.files[0].mimetype.includes('image'));
     const folderId = parseInt(req.params.folderId);
 
     const promises = req.files.map(file => {
@@ -21,8 +29,6 @@ async function postCreateFile(req, res, next){
         if(file.mimetype.includes('video')) type = 'VIDEO';
         if(file.mimetype.includes('audio')) type = 'AUDIO';
         if(documents.includes(file.mimetype)) type = 'DOCUMENT';
-
-        console.log(file.originalname + ' IS ' + type);
         
         db.createFile(file.originalname, file.path, type, file.size, folderId);
     });
@@ -31,8 +37,19 @@ async function postCreateFile(req, res, next){
     res.redirect('/mystorage');
 }
 
+async function postDeleteFile(req, res, next){
+    const fileId = parseInt(req.params.fileId);
+
+    await db.deleteFile(fileId);
+    // CHORE: tambien deberia borrarse de el almacenamiento en cloud!
+
+    res.redirect('/mystorage');
+}
+
 const filesController = {
-    postCreateFile
+    postCreateFile,
+    postDeleteFile,
+    postCreateFolder
 }
 
 export default filesController;
