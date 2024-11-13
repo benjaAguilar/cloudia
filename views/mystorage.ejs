@@ -16,14 +16,14 @@
     <form action="/createFolder/<%= folderId %>" method="post">
         <h3>Create Folder</h3>
         <label for="foldername">Folder Name</label>
-        <input type="text" name="foldername" id="foldername" placeholder="my fancy folder">
+        <input type="text" name="foldername" id="foldername" placeholder="my fancy folder" required>
         <input type="submit" value="Create">
     </form>
     <div>
         <h2>Folder <%= folderName  %></h2>
         <% locals.subfolders.forEach(folder => { %>
             <div>
-                <a href="/folder/<%= folder.id %>"><%= folder.name %></a>
+                <a href="/mystorage/folder/<%= folder.id %>"><%= folder.name %></a>
                 <form action="/deleteFolder/<%= folder.id %>" method="post">
                     <input type="submit" value="delete">
                 </form>
