@@ -26,6 +26,8 @@ router.post('/mystorage/uploadfile/:folderId', upload.array('files', 10), tryCat
 router.post('/deleteFile/:fileId', tryCatch(filesController.postDeleteFile));
 
 // folder handler
+router.get('/mystorage/folder/:folderId', tryCatch(indexController.getFolder))
+
 router.post('/createFolder/:parentId', tryCatch(filesController.postCreateFolder));
 
 export default router;
