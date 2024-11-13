@@ -51,6 +51,21 @@ async function getMainFolder(userId){
     return folder;
 }
 
+async function getFolderById(folderId, ownerId){
+    const folder = await prisma.folder.findFirst({
+        where: {
+            id: folderId,
+            ownerId: ownerId
+        },
+        include: {
+            files: true,
+            subfolders: true
+        }
+    })
+
+    return folder;
+}
+
 async function getFolderFiles(folderId){
     const files = await prisma.file.findMany({
         where: {
@@ -75,7 +90,8 @@ const db = {
     getFolderFiles,
     getMainFolder,
     deleteFile,
-    createFolder
+    createFolder,
+    getFolderById
 }
 
 export default db;
