@@ -32,7 +32,12 @@ async function getMyStorage(req, res, next) {
 
     const folder = await db.getMainFolder(userId);
 
-    res.render('mystorage', { folderId: folder.id, files: folder.files, subfolders: folder.subfolders });
+    res.render('mystorage', { 
+        folderId: folder.id,
+        files: folder.files,
+        subfolders: folder.subfolders, 
+        folderName: folder.name 
+    });
 }
 
 const indexController = {
