@@ -39,6 +39,7 @@ model File {
   name      String
   filePath  String
   fileType  FileType
+  size      Int
   Folder    Folder   @relation(fields: [folderId], references: [id])
   folderId  Int
   createdAt DateTime @default(now())
