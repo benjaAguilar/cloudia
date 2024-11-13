@@ -1,4 +1,5 @@
 import db from "../db/queries.js";
+import cleanNestedFoldersAndFiles from "../utils/cleanSubfoldersAndFiles.js";
 const documents = [
     "application/pdf",
     "application/msword",
@@ -15,6 +16,15 @@ async function postCreateFolder(req, res, next){
     const { foldername } = req.body;
 
     await db.createFolder(foldername, parentId, ownerId);
+
+    res.redirect('/mystorage');
+}
+
+async function postDeleteFolder(req, res, next){
+    const ownerId = res.locals.currentUser.id;
+    const folderId = parseInt(req.params.folderId);
+
+    await cleanNestedFoldersAndFiles(folderId, ownerId);
 
     res.redirect('/mystorage');
 }
@@ -49,7 +59,8 @@ async function postDeleteFile(req, res, next){
 const filesController = {
     postCreateFile,
     postDeleteFile,
-    postCreateFolder
+    postCreateFolder,
+    postDeleteFolder
 }
 
 export default filesController;
