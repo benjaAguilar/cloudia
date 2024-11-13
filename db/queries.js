@@ -26,6 +26,16 @@ async function createFile(name, path, type, size, folderId){
     })
 }
 
+async function createFolder(foldername, parentId, ownerId){
+    await prisma.folder.create({
+        data: {
+            name: foldername,
+            parentId: parentId,
+            ownerId: ownerId
+        }
+    });
+}
+
 async function getMainFolder(userId){
     const folder = await prisma.folder.findFirst({
         where: {
@@ -51,11 +61,21 @@ async function getFolderFiles(folderId){
     return files;
 }
 
+async function deleteFile(fileId){
+    await prisma.file.delete({
+        where: {
+            id: fileId
+        }
+    });
+}
+
 const db = {
     createUser, 
     createFile,
     getFolderFiles,
-    getMainFolder
+    getMainFolder,
+    deleteFile,
+    createFolder
 }
 
 export default db;
