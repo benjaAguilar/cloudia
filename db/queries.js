@@ -66,6 +66,14 @@ async function getFolderById(folderId, ownerId){
     return folder;
 }
 
+async function deleteFolderById(folderId){
+    await prisma.folder.delete({
+        where: {
+            id: folderId
+        }
+    });
+}
+
 async function getFolderFiles(folderId){
     const files = await prisma.file.findMany({
         where: {
@@ -84,6 +92,14 @@ async function deleteFile(fileId){
     });
 }
 
+async function deleteAllFilesByFolderId(folderId){
+    await prisma.file.deleteMany({
+        where: {
+            folderId: folderId
+        }
+    });
+}
+
 const db = {
     createUser, 
     createFile,
@@ -91,7 +107,9 @@ const db = {
     getMainFolder,
     deleteFile,
     createFolder,
-    getFolderById
+    getFolderById,
+    deleteAllFilesByFolderId,
+    deleteFolderById
 }
 
 export default db;
