@@ -20,7 +20,12 @@ router.post('/login', tryCatch(userController.postLogUser));
 
 router.get('/logout', tryCatch(userController.getLogOutUser));
 
-//upload files
+// file handler
 router.post('/mystorage/uploadfile/:folderId', upload.array('files', 10), tryCatch(filesController.postCreateFile));
+
+router.post('/deleteFile/:fileId', tryCatch(filesController.postDeleteFile));
+
+// folder handler
+router.post('/createFolder/:parentId', tryCatch(filesController.postCreateFolder));
 
 export default router;
