@@ -31,12 +31,14 @@ async function getMyStorage(req, res, next) {
     const userId = res.locals.currentUser.id;
 
     const folder = await db.getMainFolder(userId);
+    const allFolders = await db.getAllUserFolders(userId);
 
     res.render('mystorage', { 
         folderId: folder.id,
         files: folder.files,
         subfolders: folder.subfolders, 
-        folderName: folder.name 
+        folderName: folder.name,
+        allFolders 
     });
 }
 
@@ -49,13 +51,14 @@ async function getFolder(req, res, next){
     const folderId = parseInt(req.params.folderId);
 
     const folder = await db.getFolderById(folderId, ownerId);
-    console.dir(folder);
+    const allFolders = await db.getAllUserFolders(ownerId);
 
     res.render('mystorage', { 
         folderId: folder.id,
         files: folder.files,
         subfolders: folder.subfolders, 
-        folderName: folder.name 
+        folderName: folder.name,
+        allFolders 
     });
 }
 
