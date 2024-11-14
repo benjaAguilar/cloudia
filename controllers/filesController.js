@@ -39,6 +39,16 @@ async function postUpdateFolderName(req, res, next){
     res.redirect('/mystorage');
 }
 
+async function postUpdateFolderLocation(req, res, next){
+    const ownerId = res.locals.currentUser.id;
+    const folderId = parseInt(req.params.folderId);
+    const newParentId = parseInt(req.body.newParentId);
+
+    await db.updateFolderLocation(newParentId, folderId, ownerId);
+
+    res.redirect('/mystorage');
+}
+
 async function postCreateFile(req, res, next){
     const folderId = parseInt(req.params.folderId);
 
@@ -71,7 +81,8 @@ const filesController = {
     postDeleteFile,
     postCreateFolder,
     postDeleteFolder,
-    postUpdateFolderName
+    postUpdateFolderName,
+    postUpdateFolderLocation
 }
 
 export default filesController;
