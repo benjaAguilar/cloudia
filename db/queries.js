@@ -66,6 +66,16 @@ async function getFolderById(folderId, ownerId){
     return folder;
 }
 
+async function getAllUserFolders(ownerId){
+    const folders = await prisma.folder.findMany({
+        where: {
+            ownerId: ownerId
+        }
+    });
+
+    return folders;
+}
+
 async function deleteFolderById(folderId){
     await prisma.folder.delete({
         where: {
@@ -105,14 +115,14 @@ async function updateFolderName(newName, folderId, ownerId){
 const db = {
     createUser, 
     createFile,
-    getFolderFiles,
     getMainFolder,
     deleteFile,
     createFolder,
     getFolderById,
     deleteAllFilesByFolderId,
     deleteFolderById,
-    updateFolderName
+    updateFolderName,
+    getAllUserFolders
 }
 
 export default db;
