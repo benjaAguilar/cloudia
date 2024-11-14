@@ -22,18 +22,38 @@
     <div>
         <h2>Folder <%= folderName  %></h2>
         <% locals.subfolders.forEach(folder => { %>
-            <div>
+            <div style="display: flex; margin: 1rem;">
                 <a href="/mystorage/folder/<%= folder.id %>"><%= folder.name %></a>
                 <form action="/deleteFolder/<%= folder.id %>" method="post">
                     <input type="submit" value="delete">
                 </form>
+                <form action="/updateFolderName/<%= folder.id %>" method="post">
+                    <input type="text" name="newName" id="newName" value="<%= folder.name %>" required>
+                    <input type="submit" value="Rename">
+                </form>
+                <form action="/updateFolderLocation/<%= folder.id %>" method="post">
+                    <select name="newParentId" id="newParentId">
+                        <% locals.allFolders.forEach(fold => { %>
+                            <% if(fold.id !== folder.id) { %>
+                            <option value="<%= fold.id %>"><%= fold.name %></option>
+                            <% } %>
+                      <%  }); %>
+                    </select>
+                    <input type="submit" value="Move">
+                </form>
             </div>
             <% }); %>
         <% locals.files.forEach(file => { %>
-            <div>
+            <div style="display: flex; margin: 1rem;">
                 <a href="<%= file.filePath %>"><%= file.name %></a>
                 <form action="/deleteFile/<%= file.id %>" method="post">
                     <input type="submit" value="delete">
+                </form>
+                <form action="/updateFileName/<%= file.id %>" method="post">
+                    <input type="submit" value="Rename">
+                </form>
+                <form action="/updateFileLocation/<%= file.id %>" method="post">
+                    <input type="submit" value="Move">
                 </form>
             </div>
        <% }); %>
