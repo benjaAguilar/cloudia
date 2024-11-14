@@ -30,6 +30,10 @@ router.get('/mystorage/folder/:folderId', tryCatch(indexController.getFolder))
 
 router.post('/createFolder/:parentId', tryCatch(filesController.postCreateFolder));
 
-router.post('/deleteFolder/:folderId', tryCatch(filesController.postDeleteFolder))
+router.post('/deleteFolder/:folderId', tryCatch(filesController.postDeleteFolder));
+
+router.post('/updateFolderName/:folderId', tryCatch(filesController.postUpdateFolderName));
+
+router.post('/updateFolderLocation/:folderId', tryCatch(filesController.postUpdateFolderLocation));
 
 export default router;
