@@ -74,16 +74,6 @@ async function deleteFolderById(folderId){
     });
 }
 
-async function getFolderFiles(folderId){
-    const files = await prisma.file.findMany({
-        where: {
-            folderId: folderId
-        }
-    });
-    console.dir(files);
-    return files;
-}
-
 async function deleteFile(fileId){
     await prisma.file.delete({
         where: {
