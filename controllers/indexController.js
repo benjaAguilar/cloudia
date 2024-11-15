@@ -62,12 +62,38 @@ async function getFolder(req, res, next){
     });
 }
 
+async function getFile(req, res, next){
+    if(!res.locals.isAuth){
+        return res.redirect('/');
+    }
+
+    const ownerId = res.locals.currentUser.id;
+    const fileId = parseInt(req.params.fileId);
+    let isOwner = false;
+
+    const file = await db.getFileById(fileId);
+    const user = await db.getUserById(ownerId);
+
+    user.folders.forEach(folder => {
+     if(folder.id === file.folderId){
+         isOwner = true
+     }
+    });
+
+    if(!isOwner) return res.redirect('/mystorage');
+
+    res.render('file', {
+        file
+    });
+}
+
 const indexController = {
     getIndex,
     getSignUp,
     getLogIn,
     getMyStorage,
-    getFolder
+    getFolder,
+    getFile
 };
 
 export default indexController;
