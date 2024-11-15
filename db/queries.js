@@ -14,6 +14,19 @@ async function createUser(email, password){
     });
 }
 
+async function getUserById(userId){
+    const user = await prisma.user.findFirst({
+        where: {
+            id: userId
+        },
+        include: {
+            folders: true
+        }
+    });
+
+    return user;
+}
+
 async function createFile(name, path, type, size, folderId){
     await prisma.file.create({
         data: {
@@ -157,7 +170,8 @@ async function getFileById(fileId){
 }
 
 const db = {
-    createUser, 
+    createUser,
+    getUserById, 
     createFile,
     getMainFolder,
     deleteFile,
