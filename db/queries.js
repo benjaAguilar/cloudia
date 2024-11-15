@@ -124,6 +124,28 @@ async function updateFolderLocation(newParentId, folderId, ownerId){
     });
 }
 
+async function updateFileName(fileId, newName){
+    await prisma.file.update({
+        where: {
+            id: fileId
+        },
+        data: {
+            name: newName
+        }
+    });
+}
+
+async function updateFileLocation(fileId, newFolderId){
+    await prisma.file.update({
+        where: {
+            id: fileId
+        },
+        data: {
+            folderId: newFolderId
+        }
+    })
+}
+
 const db = {
     createUser, 
     createFile,
@@ -135,7 +157,9 @@ const db = {
     deleteFolderById,
     updateFolderName,
     getAllUserFolders,
-    updateFolderLocation
+    updateFolderLocation,
+    updateFileName,
+    updateFileLocation
 }
 
 export default db;
