@@ -76,13 +76,33 @@ async function postDeleteFile(req, res, next){
     res.redirect('/mystorage');
 }
 
+async function postUpdateFileName(req, res, next){
+    const fileId = parseInt(req.params.fileId);
+    const { newFileName } = req.body;
+
+    await db.updateFileName(fileId, newFileName);
+
+    res.redirect('/mystorage');
+}
+
+async function postUpdateFileLocation(req, res, next){
+    const fileId = parseInt(req.params.fileId);
+    const newFolderId = parseInt(req.body.newFolderId);
+
+    await db.updateFileLocation(fileId, newFolderId);
+
+    res.redirect('/mystorage');
+}
+
 const filesController = {
     postCreateFile,
     postDeleteFile,
     postCreateFolder,
     postDeleteFolder,
     postUpdateFolderName,
-    postUpdateFolderLocation
+    postUpdateFolderLocation,
+    postUpdateFileName,
+    postUpdateFileLocation
 }
 
 export default filesController;
