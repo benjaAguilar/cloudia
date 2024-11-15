@@ -146,6 +146,16 @@ async function updateFileLocation(fileId, newFolderId){
     })
 }
 
+async function getFileById(fileId){
+    const file = await prisma.file.findFirst({
+        where: {
+            id: fileId
+        },
+    });
+
+    return file;
+}
+
 const db = {
     createUser, 
     createFile,
@@ -159,7 +169,8 @@ const db = {
     getAllUserFolders,
     updateFolderLocation,
     updateFileName,
-    updateFileLocation
+    updateFileLocation,
+    getFileById
 }
 
 export default db;
