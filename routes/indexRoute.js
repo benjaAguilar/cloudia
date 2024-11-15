@@ -25,6 +25,10 @@ router.post('/mystorage/uploadfile/:folderId', upload.array('files', 10), tryCat
 
 router.post('/deleteFile/:fileId', tryCatch(filesController.postDeleteFile));
 
+router.post('/updateFileName/:fileId', tryCatch(filesController.postUpdateFileName));
+
+router.post('/updateFileLocation/:fileId', tryCatch(filesController.postUpdateFileLocation));
+
 // folder handler
 router.get('/mystorage/folder/:folderId', tryCatch(indexController.getFolder))
 
