@@ -21,6 +21,8 @@ router.post('/login', tryCatch(userController.postLogUser));
 router.get('/logout', tryCatch(userController.getLogOutUser));
 
 // file handler
+router.get('/mystorage/file/:fileId', tryCatch(indexController.getFile));
+
 router.post('/mystorage/uploadfile/:folderId', upload.array('files', 10), tryCatch(filesController.postCreateFile));
 
 router.post('/deleteFile/:fileId', tryCatch(filesController.postDeleteFile));
