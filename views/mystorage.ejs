@@ -6,7 +6,7 @@
     <title>Cloudia</title>
 </head>
 <body>
-    <h1>Welcome user</h1>
+    <h1><%= locals.currentUser.email %> storage</h1>
     <form action="/mystorage/uploadfile/<%= folderId %>" method="post" enctype="multipart/form-data">
         <h3>Upload File</h3>
         <input type="file" name="files" id="files" multiple>
@@ -45,7 +45,7 @@
             <% }); %>
         <% locals.files.forEach(file => { %>
             <div style="display: flex; margin: 1rem;">
-                <a href="<%= file.filePath %>"><%= file.name %></a>
+                <a href="/mystorage/file/<%= file.id %>"><%= file.name %></a>
                 <form action="/deleteFile/<%= file.id %>" method="post">
                     <input type="submit" value="delete">
                 </form>
