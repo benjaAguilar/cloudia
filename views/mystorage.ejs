@@ -50,9 +50,17 @@
                     <input type="submit" value="delete">
                 </form>
                 <form action="/updateFileName/<%= file.id %>" method="post">
+                    <input type="text" name="newFileName" id="newFileName" value="<%= file.name %>" required>
                     <input type="submit" value="Rename">
                 </form>
                 <form action="/updateFileLocation/<%= file.id %>" method="post">
+                    <select name="newFolderId" id="newFolderId">
+                        <% locals.allFolders.forEach(fold => { %>
+                            <% if(fold.id !== file.folderId) { %>
+                            <option value="<%= fold.id %>"><%= fold.name %></option>
+                            <% } %>
+                      <%  }); %>
+                    </select>
                     <input type="submit" value="Move">
                 </form>
             </div>
