@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import { v2 as cloudinary } from 'cloudinary';
 import db from "../db/queries.js";
 import cleanNestedFoldersAndFiles from "../utils/cleanSubfoldersAndFiles.js";
 import Errors from '../utils/customError.js';
@@ -54,16 +55,33 @@ async function postUpdateFolderLocation(req, res, next){
 async function postCreateFile(req, res, next){
     const folderId = parseInt(req.params.folderId);
 
+    const cloudinaryUrls = await Promise.all(
+        req.files.map(async (file) => {
+          let type = 'raw';
+
+          if(file.mimetype.includes('image')) type = 'image';
+          if(file.mimetype.includes('video')) type = 'video';
+
+          const result = await cloudinary.uploader.upload(file.path, {resource_type: type});
+          return result.secure_url; 
+        })
+      );
+      
+      console.dir(cloudinaryUrls);
+
     const promises = req.files.map(file => {
+        let i = 0;
         let type = 'OTHER';
 
         if(file.mimetype.includes('image')) type = 'IMAGE';
         if(file.mimetype.includes('video')) type = 'VIDEO';
         if(file.mimetype.includes('audio')) type = 'AUDIO';
         if(documents.includes(file.mimetype)) type = 'DOCUMENT';
-        
-        db.createFile(file.originalname, file.path, type, file.size, folderId);
+
+        db.createFile(file.originalname, file.path, cloudinaryUrls[i], type, file.size, folderId);
+        i++;
     });
+
     await Promise.all(promises);
 
     res.redirect('/mystorage');
