@@ -27,12 +27,13 @@ async function getUserById(userId){
     return user;
 }
 
-async function createFile(name, path, url, type, size, folderId){
+async function createFile(name, path, url, displayName, type, size, folderId){
     await prisma.file.create({
         data: {
             name: name,
             filePath: path,
             fileUrl: url,
+            displayName: displayName,
             fileType: type,
             size: size,
             folderId: folderId
