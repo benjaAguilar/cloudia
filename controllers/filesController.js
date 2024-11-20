@@ -1,5 +1,7 @@
+import fs from 'node:fs';
 import db from "../db/queries.js";
 import cleanNestedFoldersAndFiles from "../utils/cleanSubfoldersAndFiles.js";
+import Errors from '../utils/customError.js';
 const documents = [
     "application/pdf",
     "application/msword",
@@ -70,6 +72,14 @@ async function postCreateFile(req, res, next){
 async function postDeleteFile(req, res, next){
     const fileId = parseInt(req.params.fileId);
 
+    //delete from filesystem
+    const delFile = await db.getFileById(fileId);
+    fs.unlink(delFile.filePath, (err) => {
+        if(err){
+            return next(new Errors.customError('Error deleting file on fs', 500));
+        }
+    });
+    
     await db.deleteFile(fileId);
     // CHORE: tambien deberia borrarse de el almacenamiento en cloud!
 
