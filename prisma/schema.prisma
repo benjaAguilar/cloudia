@@ -35,16 +35,17 @@ model Folder {
 }
 
 model File {
-  id        Int      @id @default(autoincrement())
-  name      String
-  filePath  String
-  fileUrl   String
-  fileType  FileType
-  size      Int
-  Folder    Folder   @relation(fields: [folderId], references: [id])
-  folderId  Int
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int      @id @default(autoincrement())
+  name        String
+  filePath    String
+  fileUrl     String
+  displayName String
+  fileType    FileType
+  size        Int
+  Folder      Folder   @relation(fields: [folderId], references: [id])
+  folderId    Int
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
 
 enum FileType {
