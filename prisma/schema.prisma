@@ -38,6 +38,7 @@ model File {
   id        Int      @id @default(autoincrement())
   name      String
   filePath  String
+  fileUrl   String
   fileType  FileType
   size      Int
   Folder    Folder   @relation(fields: [folderId], references: [id])
