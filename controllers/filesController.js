@@ -63,7 +63,12 @@ async function postCreateFile(req, res, next){
           if(file.mimetype.includes('video')) type = 'video';
 
           const result = await cloudinary.uploader.upload(file.path, {resource_type: type});
-          return result.secure_url; 
+          console.log(result);
+
+          return {
+              url: result.secure_url,
+              displayName: result.display_name 
+          } 
         })
       );
       
@@ -78,7 +83,15 @@ async function postCreateFile(req, res, next){
         if(file.mimetype.includes('audio')) type = 'AUDIO';
         if(documents.includes(file.mimetype)) type = 'DOCUMENT';
 
-        db.createFile(file.originalname, file.path, cloudinaryUrls[i], type, file.size, folderId);
+        db.createFile(
+            file.originalname, 
+            file.path, 
+            cloudinaryUrls[i].url, 
+            cloudinaryUrls[i].displayName,
+            type,
+            file.size,
+            folderId
+        );
         i++;
     });
 
@@ -98,8 +111,11 @@ async function postDeleteFile(req, res, next){
         }
     });
     
+    //delete from db
     await db.deleteFile(fileId);
-    // CHORE: tambien deberia borrarse de el almacenamiento en cloud!
+
+    // delete from the cloud storage
+    await cloudinary.uploader.destroy(delFile.displayName);
 
     res.redirect('/mystorage');
 }
