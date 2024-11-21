@@ -1,0 +1,49 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    color: #00749E;
+}
+
+body {
+    width: 100%;
+    height: 100dvh;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    background-image: url('/bg.webp');
+    background-position: center;
+    background-size: cover;
+
+    .anchors{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 2rem;
+        font-size: 1.2rem;
+    }
+}
+
+.title-box{
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    align-items: center;
+    width: 100%;
+
+    margin-bottom: 1rem;
+
+    img{
+        width: 200px;
+    }
+
+    h1{
+        font-size: 3rem;
+        margin-bottom: 1rem;
+        text-transform: uppercase;
+    }
+}
