@@ -3,12 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/mystorage.css">
     <title>Cloudia</title>
 </head>
 <body>
-    <h1><%= locals.currentUser.email %> storage</h1>
-    <form action="/mystorage/uploadfile/<%= folderId %>" method="post" enctype="multipart/form-data">
-        <h3>Upload File</h3>
+    <header>
+        <div>
+            <img src="/icons/logo.svg" alt="logo">
+            <h3>Cloudia</h3>
+        </div>
+        <h3><%= locals.currentUser.email %> storage</h3>
+        <a href="/logout">LogOut</a>
+    </header>
+    <div class="grid">
+    <div class="dashboard">
+        <form action="/mystorage/uploadfile/<%= folderId %>" method="post" enctype="multipart/form-data">
+                <h3>Upload File</h3>
         <input type="file" name="files" id="files" multiple>
         <input type="submit" value="Upload">
     </form>
@@ -19,8 +29,9 @@
         <input type="text" name="foldername" id="foldername" placeholder="my fancy folder" required>
         <input type="submit" value="Create">
     </form>
+    </div>
     <div>
-        <h2>Folder <%= folderName  %></h2>
+        <h2><%= folderName %> Folder</h2>
         <% locals.subfolders.forEach(folder => { %>
             <div style="display: flex; margin: 1rem;">
                 <a href="/mystorage/folder/<%= folder.id %>"><%= folder.name %></a>
@@ -67,5 +78,6 @@
             </div>
        <% }); %>
     </div>
+ </div>
 </body>
 </html>
