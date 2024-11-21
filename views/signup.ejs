@@ -3,23 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Hammersmith+One&family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/index.css">
     <title>Cloudia</title>
 </head>
 <body>
     <div>
         <h1>SignUp on Cloudia</h1>
-        <img src="icons/logo.svg" alt="Cloudia logo">
     </div>
     <%- include("partials/errors.ejs") %>
     <form action="/signup" method="post">
-        <label for="email">Email</label>
-        <input type="email" name="email" id="email">
-
-        <label for="password">Password</label>
-        <input type="password" name="password" id="password">
-
-        <label for="password">Repeat password</label>
-        <input type="password" name="r-password" id="r-password">
+        <div>
+            <label for="email">Email</label>
+            <input type="email" name="email" id="email">
+        </div>
+        <div>
+            <label for="password">Password</label>
+            <input type="password" name="password" id="password">
+        </div>
+        <div>
+            <label for="password">Repeat password</label>
+            <input type="password" name="r-password" id="r-password">
+        </div>
 
         <input type="submit" value="Sign Up">
     </form>
