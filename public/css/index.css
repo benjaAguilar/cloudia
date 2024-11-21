@@ -35,15 +35,36 @@ body {
     align-items: center;
     width: 100%;
 
-    margin-bottom: 1rem;
+    position: relative;
 
     img{
         width: 200px;
     }
 
     h1{
-        font-size: 3rem;
-        margin-bottom: 1rem;
-        text-transform: uppercase;
+        font-family: "Pacifico", cursive;
+        font-weight: 200;
+        font-style: normal;
+        font-size: 4rem;
+        position: absolute;
+        bottom: -80px;
+    }
+}
+
+h3{
+    margin-top: 5rem;
+    margin-bottom: 1rem;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 1rem;
+    div{
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
     }
 }
