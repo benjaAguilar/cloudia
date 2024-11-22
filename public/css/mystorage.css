@@ -60,3 +60,39 @@ h2{
     margin-top: 3rem;
     font-size: 3rem;
 }
+
+.foldersContainer, .filesContainer{
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.folder{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5rem;
+    img{
+        width: 50px;
+    }
+}
+
+.edit{
+    margin-left: 0.5rem;
+    img{
+        width: 15px;
+    }
+    button{
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        margin-top: 0.5rem;
+    }
+}
+
+.rename_box, .move_box{
+    display: none;
+}
