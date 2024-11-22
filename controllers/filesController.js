@@ -52,48 +52,52 @@ async function postUpdateFolderLocation(req, res, next){
     res.redirect('/mystorage');
 }
 
-async function postCreateFile(req, res, next){
+async function postCreateFile(req, res, next) {
     const folderId = parseInt(req.params.folderId);
 
-    const cloudinaryUrls = await Promise.all(
+    const processedFiles = await Promise.all(
         req.files.map(async (file) => {
-          let type = 'raw';
+            let type = 'raw';
 
-          if(file.mimetype.includes('image')) type = 'image';
-          if(file.mimetype.includes('video')) type = 'video';
+            if (file.mimetype.includes('image')) type = 'image';
+            if (file.mimetype.includes('video')) type = 'video';
 
-          const result = await cloudinary.uploader.upload(file.path, {resource_type: type});
-          console.log(result);
+            const result = await cloudinary.uploader.upload(file.path, {
+                resource_type: type,
+            });
 
-          return {
-              url: result.secure_url,
-              displayName: result.display_name 
-          } 
+            console.log(result);
+
+            return {
+                originalName: file.originalname,
+                localPath: file.path,
+                cloudUrl: result.secure_url,
+                displayName: result.public_id, 
+                type: file.mimetype.includes('image')
+                    ? 'IMAGE'
+                    : file.mimetype.includes('video')
+                    ? 'VIDEO'
+                    : file.mimetype.includes('audio')
+                    ? 'AUDIO'
+                    : documents.includes(file.mimetype)
+                    ? 'DOCUMENT'
+                    : 'OTHER',
+                size: file.size,
+            };
         })
-      );
-      
-      console.dir(cloudinaryUrls);
+    );
 
-    const promises = req.files.map(file => {
-        let i = 0;
-        let type = 'OTHER';
-
-        if(file.mimetype.includes('image')) type = 'IMAGE';
-        if(file.mimetype.includes('video')) type = 'VIDEO';
-        if(file.mimetype.includes('audio')) type = 'AUDIO';
-        if(documents.includes(file.mimetype)) type = 'DOCUMENT';
-
+    const promises = processedFiles.map((file) =>
         db.createFile(
-            file.originalname, 
-            file.path, 
-            cloudinaryUrls[i].url, 
-            cloudinaryUrls[i].displayName,
-            type,
+            file.originalName,
+            file.localPath,
+            file.cloudUrl,
+            file.displayName,
+            file.type,
             file.size,
             folderId
-        );
-        i++;
-    });
+        )
+    );
 
     await Promise.all(promises);
 
@@ -115,7 +119,12 @@ async function postDeleteFile(req, res, next){
     await db.deleteFile(fileId);
 
     // delete from the cloud storage
-    await cloudinary.uploader.destroy(delFile.displayName);
+    let type = 'raw';
+
+    if (delFile.fileType.includes('IMAGE')) type = 'image';
+    if (delFile.fileType.includes('VIDEO')) type = 'video';
+
+    await cloudinary.uploader.destroy(delFile.displayName, {resource_type: type});
 
     res.redirect('/mystorage');
 }
