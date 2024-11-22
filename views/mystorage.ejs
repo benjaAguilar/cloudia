@@ -32,52 +32,111 @@
     </div>
     <div>
         <h2><%= folderName %> Folder</h2>
+        <div class="foldersContainer">
         <% locals.subfolders.forEach(folder => { %>
             <div style="display: flex; margin: 1rem;">
-                <a href="/mystorage/folder/<%= folder.id %>"><%= folder.name %></a>
+                <a href="/mystorage/folder/<%= folder.id %>" class="folder">
+                    <img src="/icons/folder_open.svg" alt="">
+                    <%= folder.name %>
+                </a>
+                <div class="edit">
                 <form action="/deleteFolder/<%= folder.id %>" method="post">
-                    <input type="submit" value="delete">
+                    <input type="image" src="/icons/delete.svg" alt="Delete" width="15" height="15">
                 </form>
                 <form action="/updateFolderName/<%= folder.id %>" method="post">
-                    <input type="text" name="newName" id="newName" value="<%= folder.name %>" required>
-                    <input type="submit" value="Rename">
+                    <button id="openRename">
+                        <img src="/icons/rename.svg" alt="rename">
+                    </button>
+                    <div class="rename_box" style="display: none;">
+                        <input type="text" name="newName" id="newName" value="<%= folder.name %>" required>
+                        <input type="submit" value="Rename">
+                    </div>
                 </form>
                 <form action="/updateFolderLocation/<%= folder.id %>" method="post">
-                    <select name="newParentId" id="newParentId">
-                        <% locals.allFolders.forEach(fold => { %>
-                            <% if(fold.id !== folder.id) { %>
-                            <option value="<%= fold.id %>"><%= fold.name %></option>
-                            <% } %>
-                      <%  }); %>
-                    </select>
-                    <input type="submit" value="Move">
-                </form>
+                    <button id="openMove">
+                        <img src="/icons/move.svg" alt="move">
+                    </button>
+                        <div class="move_box" style="display: none;">
+                        <select name="newParentId" id="newParentId">
+                            <% locals.allFolders.forEach(fold => { %>
+                                <% if(fold.id !== folder.id) { %>
+                                    <option value="<%= fold.id %>"><%= fold.name %></option>
+                                    <% } %>
+                                    <%  }); %>
+                                </select>
+                                <input type="submit" value="Move">
+                        </div>
+                    </form>
+                </div>
             </div>
             <% }); %>
+        </div>
+        <div class="filesContainer">
         <% locals.files.forEach(file => { %>
             <div style="display: flex; margin: 1rem;">
-                <a href="/mystorage/file/<%= file.id %>"><%= file.name %></a>
-                <a href="<%= file.fileUrl %>">Preview</a>
+                <a href="/mystorage/file/<%= file.id %>" class="folder">
+                    <img src="<%= fileIcons[file.fileType] %>" alt="">
+                    <%= file.name %>
+                </a>
+                <div class="edit">
                 <form action="/deleteFile/<%= file.id %>" method="post">
-                    <input type="submit" value="delete">
+                    <input type="image" src="/icons/delete.svg" alt="Delete" width="15" height="15">
                 </form>
                 <form action="/updateFileName/<%= file.id %>" method="post">
-                    <input type="text" name="newFileName" id="newFileName" value="<%= file.name %>" required>
-                    <input type="submit" value="Rename">
+                    <button id="openRename">
+                        <img src="/icons/rename.svg" alt="rename">
+                    </button>
+                    <div class="rename_box" style="display: none;">
+                        <input type="text" name="newFileName" id="newFileName" value="<%= file.name %>" required>
+                        <input type="submit" value="Rename">
+                    </div>
                 </form>
                 <form action="/updateFileLocation/<%= file.id %>" method="post">
-                    <select name="newFolderId" id="newFolderId">
-                        <% locals.allFolders.forEach(fold => { %>
-                            <% if(fold.id !== file.folderId) { %>
-                            <option value="<%= fold.id %>"><%= fold.name %></option>
-                            <% } %>
-                      <%  }); %>
-                    </select>
-                    <input type="submit" value="Move">
+                    <button id="openMove">
+                        <img src="/icons/move.svg" alt="move">
+                    </button>
+                    <div class="move_box" style="display: none;">
+
+                        <select name="newFolderId" id="newFolderId">
+                            <% locals.allFolders.forEach(fold => { %>
+                                <% if(fold.id !== file.folderId) { %>
+                                    <option value="<%= fold.id %>"><%= fold.name %></option>
+                                    <% } %>
+                                    <%  }); %>
+                                </select>
+                                <input type="submit" value="Move">
+                    </div>
                 </form>
+                </div>
             </div>
        <% }); %>
     </div>
+    </div>
  </div>
+ <script>
+    const btnRename = document.querySelectorAll('#openRename');
+    const btnMove = document.querySelectorAll('#openMove');
+
+    const btns = [btnRename, btnMove];
+
+    function addEvent(element){
+        const sibling = element.nextElementSibling;
+
+        element.addEventListener('click', (e) => {
+            e.preventDefault();
+
+            if(sibling.style.display === 'none') {
+                sibling.style.display = 'block';
+                return;
+            }
+
+            sibling.style.display = 'none';
+        });
+    }
+
+    btns.forEach(btn => {
+        btn.forEach(bt => {addEvent(bt)});
+    });
+ </script>
 </body>
 </html>
