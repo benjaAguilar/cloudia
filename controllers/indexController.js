@@ -1,4 +1,11 @@
 import db from "../db/queries.js";
+const fileIcons = {
+    IMAGE: '/icons/image.svg',
+    VIDEO: '/icons/video.svg',
+    DOCUMENT: '/icons/doc.svg',
+    AUDIO: '/icons/audio.svg',
+    OTHER: '/icons/other.svg',
+}
 
 async function getIndex(req, res, next){
     if(res.locals.isAuth){
@@ -38,7 +45,8 @@ async function getMyStorage(req, res, next) {
         files: folder.files,
         subfolders: folder.subfolders, 
         folderName: folder.name,
-        allFolders 
+        allFolders,
+        fileIcons 
     });
 }
 
@@ -58,7 +66,8 @@ async function getFolder(req, res, next){
         files: folder.files,
         subfolders: folder.subfolders, 
         folderName: folder.name,
-        allFolders 
+        allFolders,
+        fileIcons  
     });
 }
 
