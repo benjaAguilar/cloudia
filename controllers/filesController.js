@@ -66,6 +66,13 @@ async function postCreateFile(req, res, next) {
                 resource_type: type,
             });
 
+            //delete from filesystem once is uploaded to cloudinary
+            fs.unlink(file.path, (err) => {
+                if(err){
+                    return next(new Errors.customError('Error deleting file on fs', 500));
+                }
+            });
+
             console.log(result);
 
             return {
@@ -106,14 +113,7 @@ async function postCreateFile(req, res, next) {
 
 async function postDeleteFile(req, res, next){
     const fileId = parseInt(req.params.fileId);
-
-    //delete from filesystem
     const delFile = await db.getFileById(fileId);
-    fs.unlink(delFile.filePath, (err) => {
-        if(err){
-            return next(new Errors.customError('Error deleting file on fs', 500));
-        }
-    });
     
     //delete from db
     await db.deleteFile(fileId);
@@ -122,7 +122,7 @@ async function postDeleteFile(req, res, next){
     let type = 'raw';
 
     if (delFile.fileType.includes('IMAGE')) type = 'image';
-    if (delFile.fileType.includes('VIDEO')) type = 'video';
+    if (delFile.fileType.includes('VIDEO') || delFile.fileType.includes('AUDIO')) type = 'video';
 
     await cloudinary.uploader.destroy(delFile.displayName, {resource_type: type});
 
