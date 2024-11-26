@@ -113,7 +113,7 @@ async function postCreateFile(req, res, next) {
 
     const promises = succesFiles.map(async (file) => {
         try{
-            db.createFile(
+            await db.createFile(
                 file.originalName,
                 file.localPath,
                 file.cloudUrl,
@@ -124,6 +124,8 @@ async function postCreateFile(req, res, next) {
             )
 
         } catch(err){
+            console.error(`Error saving File ${file.originalName} on DB: ${err.message}`);
+            
             let type = 'raw';
 
             if (file.type === 'IMAGE') type = 'image';
