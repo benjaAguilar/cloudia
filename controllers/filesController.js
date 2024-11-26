@@ -57,53 +57,81 @@ async function postCreateFile(req, res, next) {
 
     const processedFiles = await Promise.all(
         req.files.map(async (file) => {
-            let type = 'raw';
+            try{
+                let type = 'raw';
 
-            if (file.mimetype.includes('image')) type = 'image';
-            if (file.mimetype.includes('video')) type = 'video';
+                if (file.mimetype.includes('image')) type = 'image';
+                if (file.mimetype.includes('video') || file.mimetype.includes('audio')) type = 'video';
+    
+                const result = await cloudinary.uploader.upload(file.path, {
+                    resource_type: type,
+                });
+    
+                //delete from filesystem once is uploaded to cloudinary
+                fs.unlink(file.path, (err) => {
+                    if(err){
+                        return next(new Errors.customError('Error deleting file on fs', 500));
+                    }
+                });
+    
+                console.log(result);
+    
+                return {
+                    originalName: file.originalname,
+                    localPath: file.path,
+                    cloudUrl: result.secure_url,
+                    displayName: result.public_id, 
+                    type: file.mimetype.includes('image')
+                        ? 'IMAGE'
+                        : file.mimetype.includes('video')
+                        ? 'VIDEO'
+                        : file.mimetype.includes('audio')
+                        ? 'AUDIO'
+                        : documents.includes(file.mimetype)
+                        ? 'DOCUMENT'
+                        : 'OTHER',
+                    size: file.size,
+                    error: null,
+                };
 
-            const result = await cloudinary.uploader.upload(file.path, {
-                resource_type: type,
-            });
-
-            //delete from filesystem once is uploaded to cloudinary
-            fs.unlink(file.path, (err) => {
-                if(err){
-                    return next(new Errors.customError('Error deleting file on fs', 500));
+            }catch(err) {
+                console.error(`Error Uploading File ${file.originalName}: ${err.message}`);
+                return {
+                    originalName: file.originalName,
+                    error: `Error Uploading File ${file.originalName}`
                 }
-            });
-
-            console.log(result);
-
-            return {
-                originalName: file.originalname,
-                localPath: file.path,
-                cloudUrl: result.secure_url,
-                displayName: result.public_id, 
-                type: file.mimetype.includes('image')
-                    ? 'IMAGE'
-                    : file.mimetype.includes('video')
-                    ? 'VIDEO'
-                    : file.mimetype.includes('audio')
-                    ? 'AUDIO'
-                    : documents.includes(file.mimetype)
-                    ? 'DOCUMENT'
-                    : 'OTHER',
-                size: file.size,
-            };
+            }
         })
     );
 
-    const promises = processedFiles.map((file) =>
-        db.createFile(
-            file.originalName,
-            file.localPath,
-            file.cloudUrl,
-            file.displayName,
-            file.type,
-            file.size,
-            folderId
-        )
+    const succesFiles = processedFiles.filter(file => !file.error);
+    const failedFiles = processedFiles.filter(file => file.error);
+
+    if (failedFiles.length > 0) {
+        console.warn('Algunos archivos no se subieron correctamente:', failedFiles);
+    }
+
+    const promises = succesFiles.map(async (file) => {
+        try{
+            db.createFile(
+                file.originalName,
+                file.localPath,
+                file.cloudUrl,
+                file.displayName,
+                file.type,
+                file.size,
+                folderId
+            )
+
+        } catch(err){
+            let type = 'raw';
+
+            if (file.type === 'IMAGE') type = 'image';
+            if (file.type === 'VIDEO' || file.type === 'AUDIO') type = 'video';
+
+            await cloudinary.uploader.destroy(file.displayName, {resource_type: type});
+        }
+    }
     );
 
     await Promise.all(promises);
@@ -115,16 +143,21 @@ async function postDeleteFile(req, res, next){
     const fileId = parseInt(req.params.fileId);
     const delFile = await db.getFileById(fileId);
     
-    //delete from db
-    await db.deleteFile(fileId);
+    try {
+        // delete from the cloud storage
+        let type = 'raw';
+    
+        if (delFile.fileType.includes('IMAGE')) type = 'image';
+        if (delFile.fileType.includes('VIDEO') || delFile.fileType.includes('AUDIO')) type = 'video';
+    
+        await cloudinary.uploader.destroy(delFile.displayName, {resource_type: type});
 
-    // delete from the cloud storage
-    let type = 'raw';
+        //delete from db
+        await db.deleteFile(fileId);
 
-    if (delFile.fileType.includes('IMAGE')) type = 'image';
-    if (delFile.fileType.includes('VIDEO') || delFile.fileType.includes('AUDIO')) type = 'video';
-
-    await cloudinary.uploader.destroy(delFile.displayName, {resource_type: type});
+    } catch(err) {
+        throw new Error(`Error Deleting File ${delFile.name}: ${err.message}`);
+    }
 
     res.redirect('/mystorage');
 }
