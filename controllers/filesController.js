@@ -19,8 +19,9 @@ async function postCreateFolder(req, res, next){
     const { foldername } = req.body;
 
     await db.createFolder(foldername, parentId, ownerId);
+    const referer = req.get('Referer');
 
-    res.redirect('/mystorage');
+    res.redirect(referer);
 }
 
 async function postDeleteFolder(req, res, next){
@@ -29,7 +30,9 @@ async function postDeleteFolder(req, res, next){
 
     await cleanNestedFoldersAndFiles(folderId, ownerId);
 
-    res.redirect('/mystorage');
+    const referer = req.get('Referer');
+
+    res.redirect(referer);
 }
 
 async function postUpdateFolderName(req, res, next){
@@ -39,7 +42,9 @@ async function postUpdateFolderName(req, res, next){
 
     await db.updateFolderName(newName, folderId, ownerId);
 
-    res.redirect('/mystorage');
+    const referer = req.get('Referer');
+
+    res.redirect(referer);
 }
 
 async function postUpdateFolderLocation(req, res, next){
@@ -49,7 +54,9 @@ async function postUpdateFolderLocation(req, res, next){
 
     await db.updateFolderLocation(newParentId, folderId, ownerId);
 
-    res.redirect('/mystorage');
+    const referer = req.get('Referer');
+
+    res.redirect(referer);
 }
 
 async function postCreateFile(req, res, next) {
@@ -138,7 +145,9 @@ async function postCreateFile(req, res, next) {
 
     await Promise.all(promises);
 
-    res.redirect('/mystorage');
+    const referer = req.get('Referer');
+
+    res.redirect(referer);
 }
 
 async function postDeleteFile(req, res, next){
@@ -161,7 +170,9 @@ async function postDeleteFile(req, res, next){
         throw new Error(`Error Deleting File ${delFile.name}: ${err.message}`);
     }
 
-    res.redirect('/mystorage');
+    const referer = req.get('Referer');
+
+    res.redirect(referer);
 }
 
 async function postUpdateFileName(req, res, next){
@@ -170,7 +181,9 @@ async function postUpdateFileName(req, res, next){
 
     await db.updateFileName(fileId, newFileName);
 
-    res.redirect('/mystorage');
+    const referer = req.get('Referer');
+
+    res.redirect(referer);
 }
 
 async function postUpdateFileLocation(req, res, next){
@@ -179,7 +192,9 @@ async function postUpdateFileLocation(req, res, next){
 
     await db.updateFileLocation(fileId, newFolderId);
 
-    res.redirect('/mystorage');
+    const referer = req.get('Referer');
+
+    res.redirect(referer);
 }
 
 const filesController = {
