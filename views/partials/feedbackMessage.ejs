@@ -1,0 +1,21 @@
+<% if( locals.feedback ) { %>
+    <div class="feedbackBox">
+        <button id="closeFeedback">
+            <img src="/icons/close.svg" alt="Close">
+        </button>
+        <p><%= feedback %></p>
+    </div>
+    <script>
+        const btnClose = document.querySelector("#closeFeedback");
+
+        setTimeout(() => {
+            btnClose.parentElement.style.display = 'none';
+        }, 5000);
+
+        if(btnClose){
+            btnClose.addEventListener('click', () => {
+                btnClose.parentElement.style.display = 'none';
+            });
+        }
+    </script>
+<% } %>
