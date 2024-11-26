@@ -27,8 +27,10 @@ async function getLogIn(req, res, next){
     if(res.locals.isAuth){
         return res.redirect('/mystorage');
     }
+    const feedback = req.session.feedback;
+    delete req.session.feedback;
 
-    res.render('login');
+    res.render('login', {feedback});
 }
 
 async function getMyStorage(req, res, next) {
@@ -36,6 +38,8 @@ async function getMyStorage(req, res, next) {
         return res.redirect('/');
     }
     const userId = res.locals.currentUser.id;
+    const feedback = req.session.feedback;
+    delete req.session.feedback;
 
     const folder = await db.getMainFolder(userId);
     const allFolders = await db.getAllUserFolders(userId);
@@ -46,7 +50,8 @@ async function getMyStorage(req, res, next) {
         subfolders: folder.subfolders, 
         folderName: folder.name,
         allFolders,
-        fileIcons 
+        fileIcons,
+        feedback 
     });
 }
 
@@ -54,6 +59,8 @@ async function getFolder(req, res, next){
     if(!res.locals.isAuth){
         return res.redirect('/');
     }
+    const feedback = req.session.feedback;
+    delete req.session.feedback;
 
     const ownerId = res.locals.currentUser.id;
     const folderId = parseInt(req.params.folderId);
@@ -67,7 +74,8 @@ async function getFolder(req, res, next){
         subfolders: folder.subfolders, 
         folderName: folder.name,
         allFolders,
-        fileIcons  
+        fileIcons,
+        feedback  
     });
 }
 

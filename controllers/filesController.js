@@ -19,8 +19,10 @@ async function postCreateFolder(req, res, next){
     const { foldername } = req.body;
 
     await db.createFolder(foldername, parentId, ownerId);
-    const referer = req.get('Referer');
 
+    req.session.feedback = `Created Folder: ${foldername}`;
+
+    const referer = req.get('Referer');
     res.redirect(referer);
 }
 
@@ -30,8 +32,9 @@ async function postDeleteFolder(req, res, next){
 
     await cleanNestedFoldersAndFiles(folderId, ownerId);
 
-    const referer = req.get('Referer');
+    req.session.feedback = 'Folder sucessfully deleted!';
 
+    const referer = req.get('Referer');
     res.redirect(referer);
 }
 
@@ -43,7 +46,6 @@ async function postUpdateFolderName(req, res, next){
     await db.updateFolderName(newName, folderId, ownerId);
 
     const referer = req.get('Referer');
-
     res.redirect(referer);
 }
 
@@ -54,13 +56,15 @@ async function postUpdateFolderLocation(req, res, next){
 
     await db.updateFolderLocation(newParentId, folderId, ownerId);
 
-    const referer = req.get('Referer');
+    req.session.feedback = 'Folder Sucessfully moved';
 
+    const referer = req.get('Referer');
     res.redirect(referer);
 }
 
 async function postCreateFile(req, res, next) {
     const folderId = parseInt(req.params.folderId);
+    let feedError = false;
 
     const processedFiles = await Promise.all(
         req.files.map(async (file) => {
@@ -115,7 +119,9 @@ async function postCreateFile(req, res, next) {
     const failedFiles = processedFiles.filter(file => file.error);
 
     if (failedFiles.length > 0) {
-        console.warn('Algunos archivos no se subieron correctamente:', failedFiles);
+        console.warn('Some files didnt upload correctly:', failedFiles);
+        req.session.feedback = `Some files didnt upload correctly: ${failedFiles}`;
+        feedError = true;
     }
 
     const promises = succesFiles.map(async (file) => {
@@ -132,7 +138,9 @@ async function postCreateFile(req, res, next) {
 
         } catch(err){
             console.error(`Error saving File ${file.originalName} on DB: ${err.message}`);
-            
+            req.session.feedback = `Error saving File ${file.originalName} on DB: ${err.message}`;
+            feedError = true;
+
             let type = 'raw';
 
             if (file.type === 'IMAGE') type = 'image';
@@ -145,8 +153,9 @@ async function postCreateFile(req, res, next) {
 
     await Promise.all(promises);
 
-    const referer = req.get('Referer');
+    if(!feedError) req.session.feedback = 'Files uploaded Sucessfully!';
 
+    const referer = req.get('Referer');
     res.redirect(referer);
 }
 
@@ -170,8 +179,9 @@ async function postDeleteFile(req, res, next){
         throw new Error(`Error Deleting File ${delFile.name}: ${err.message}`);
     }
 
-    const referer = req.get('Referer');
+    req.session.feedback = `File: ${delFile.name} sucessfully deleted!`;
 
+    const referer = req.get('Referer');
     res.redirect(referer);
 }
 
