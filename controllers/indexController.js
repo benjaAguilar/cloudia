@@ -92,7 +92,8 @@ async function getFile(req, res, next){
     if(!isOwner) return res.redirect('/mystorage');
 
     res.render('file', {
-        file
+        file,
+        fileIcons
     });
 }
 
