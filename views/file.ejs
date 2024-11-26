@@ -3,11 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/mystorage.css">
     <title>Cloudia</title>
 </head>
 <body>
-    <h1><%= file.name %></h1>
-    <p><%= file.fileType %></p>
-    <p><%= file.size %></p>
+    <header>
+        <div>
+            <img src="/icons/logo.svg" alt="logo">
+            <h3>Cloudia</h3>
+        </div>
+        <h3><%= locals.currentUser.email %> storage</h3>
+        <a href="/logout">LogOut</a>
+    </header>
+    <div class="grid">
+    <div class="dashboard">
+        <h4>Folder Navs</h4>
+    </div>
+    <div class="fileBox">
+        <h2><%= file.name %></h2>
+        <img src="<%= fileIcons[file.fileType] %>" alt="" class="fileImage">
+        <div class="dataBox">
+            <div class="fileData">
+                <p>Type: <%= file.fileType %></p>    
+                <p><%= parseFloat(file.size / 1048576).toFixed(2) %> MB</p>
+            </div>
+            <div>
+                <a href="<%= file.fileUrl %>" download="<%= file.name %>" target="_blank">Download</a>
+            </div>
+        </div>
+    </div>
+    </div>
+ </div>
 </body>
 </html>
