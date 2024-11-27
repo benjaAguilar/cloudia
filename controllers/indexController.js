@@ -90,6 +90,7 @@ async function getFile(req, res, next){
 
     const file = await db.getFileById(fileId);
     const user = await db.getUserById(ownerId);
+    const allFolders = await db.getAllUserFolders(ownerId);
 
     user.folders.forEach(folder => {
      if(folder.id === file.folderId){
@@ -101,7 +102,8 @@ async function getFile(req, res, next){
 
     res.render('file', {
         file,
-        fileIcons
+        fileIcons,
+        allFolders
     });
 }
 
