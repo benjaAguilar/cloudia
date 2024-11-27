@@ -18,6 +18,8 @@ async function postCreateFolder(req, res, next){
     const parentId = parseInt(req.params.parentId);
     const { foldername } = req.body;
 
+    if(!foldername) return next(new Errors.customError('Error creating new folder: Folder does not have name', 400));
+
     await db.createFolder(foldername, parentId, ownerId);
 
     req.session.feedback = `Created Folder: ${foldername}`;
