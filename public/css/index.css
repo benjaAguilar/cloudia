@@ -68,3 +68,28 @@ form {
         gap: 0.2rem;
     }
 }
+
+.feedbackBox{
+    position: absolute;
+    bottom: 0;
+    right: 0;
+
+    background-color: #fafafa;
+    margin: 1rem;
+    padding: 1rem;
+    border-radius: 1rem;
+
+    display: flex;
+    flex-direction: column;
+
+    button{
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        align-self: flex-end;
+    }
+
+    p{
+        margin-top: 1rem;
+    }
+}
