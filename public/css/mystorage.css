@@ -187,3 +187,20 @@ h2{
         transform: scale(1);
     }
 }
+
+.buttonType, input[type=submit], input[type=file]{
+    background-color: #00749E;
+    border: none;
+    color: #fafafa;
+    padding: 0.5rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+input[type=text], input[type=email], input[type=password]{
+    padding: 0.3rem;
+    border: 3px solid #00749E;
+    border-radius: 0.5rem;
+    background-color: transparent;
+}
