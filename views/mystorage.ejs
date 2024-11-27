@@ -18,11 +18,18 @@
     </header>
     <div class="grid">
     <div class="dashboard">
-        <form action="/mystorage/uploadfile/<%= folderId %>" method="post" enctype="multipart/form-data">
+        <div>
+            <form action="/mystorage/uploadfile/<%= folderId %>" method="post" enctype="multipart/form-data">
                 <h3>Upload File</h3>
-        <input type="file" name="files" id="files" multiple>
-        <input type="submit" value="Upload">
-    </form>
+                <input type="file" name="files" id="files" multiple>
+                <input type="submit" value="Upload" id="uploadFiles">
+            </form>
+            <div class="uploading">
+                <h3>Uploading Files...</h3>
+                <img src="/icons/logo.svg" alt="logo" class="loading">
+                <i>be patient</i>
+            </div>
+        </div>
     <!-- Create folder with his parent folder id as a param -->
     <form action="/createFolder/<%= folderId %>" method="post">
         <h3>Create Folder</h3>
@@ -125,7 +132,15 @@
     const btnRename = document.querySelectorAll('#openRename');
     const btnMove = document.querySelectorAll('#openMove');
 
+    const uploadFilesBtn = document.querySelector('#uploadFiles');
+    const uploadingFeedback = document.querySelector('.uploading');
+
     const btns = [btnRename, btnMove];
+
+    uploadFilesBtn.addEventListener('click', () => {
+        uploadFilesBtn.parentElement.style.display = 'none';
+        uploadingFeedback.style.display = 'flex';
+    });
 
     function addEvent(element){
         const sibling = element.nextElementSibling;
