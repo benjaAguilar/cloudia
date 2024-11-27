@@ -30,9 +30,16 @@
         <input type="text" name="foldername" id="foldername" placeholder="my fancy folder" required>
         <input type="submit" value="Create">
     </form>
+    <ul class="nav">
+        <li><a href="/mystorage">My storage<% if(folderName === 'Main'){%> <img src="/icons/folder_open.svg"> <%}%></a></li>
+        <% locals.allFolders.forEach(folder => { %>
+            <% if(folder.name === 'Main') return; %>
+            <li><a href="/mystorage/folder/<%= folder.id %>"><%= folder.name %><% if(folderName === folder.name){%> <img src="/icons/folder_open.svg"> <%}%></a></li>
+        <% }) %>
+    </ul>
     </div>
     <div>
-        <h2><%= folderName %> Folder</h2>
+        <h2><%= folderName === 'Main' ? 'My storage' : `${folderName} Folder` %></h2>
         <div class="foldersContainer">
         <% locals.subfolders.forEach(folder => { %>
             <div style="display: flex; margin: 1rem;">
