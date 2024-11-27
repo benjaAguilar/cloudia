@@ -176,7 +176,7 @@ async function postDeleteFile(req, res, next){
         await db.deleteFile(fileId);
 
     } catch(err) {
-        throw new Error(`Error Deleting File ${delFile.name}: ${err.message}`);
+        return next(new Errors.customError(`Error Deleting the file: ${delFile.name}`, 500));
     }
 
     req.session.feedback = `File: ${delFile.name} sucessfully deleted!`;
