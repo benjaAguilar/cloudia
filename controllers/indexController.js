@@ -11,8 +11,11 @@ async function getIndex(req, res, next){
     if(res.locals.isAuth){
         return res.redirect('/mystorage');
     }
+
+    const feedback = req.session.feedback;
+    delete req.session.feedback;
     
-    res.render('index');
+    res.render('index', {feedback});
 }
 
 async function getSignUp(req, res, next){
