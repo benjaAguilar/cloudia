@@ -115,9 +115,7 @@
 
                         <select name="newFolderId" id="newFolderId">
                             <% locals.allFolders.forEach(fold => { %>
-                                <% if(fold.id !== file.folderId) { %>
                                     <option value="<%= fold.id %>"><%= fold.name %></option>
-                                    <% } %>
                                     <%  }); %>
                                 </select>
                                 <input type="submit" value="Move">
