@@ -13,9 +13,10 @@
             <img src="/icons/logo.svg" alt="logo">
             <h3>Cloudia</h3>
         </div>
-        <h3><%= locals.currentUser.email %> storage</h3>
+        <h3 class="user"><%= locals.currentUser.email %> storage</h3>
         <a href="/logout">LogOut</a>
     </header>
+    <%- include("partials/phoneForms.ejs") %>
     <div class="grid">
     <div class="dashboard">
         <div>
