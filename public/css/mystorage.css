@@ -266,4 +266,11 @@ input[type=text], input[type=email], input[type=password]{
         width: 150px;
     }
     
+    .grid{
+        grid-template-columns: 1fr;
+    }
+
+    .fileName{
+        font-size: 2rem;
+    }
 }
