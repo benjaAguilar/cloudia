@@ -1,0 +1,68 @@
+<div class="phoneNav">
+    <button id="btnNewFolder" class="buttonType">New Folder</button>
+    <button id="btnNewFile" class="buttonType">New File</button>
+    <button id="btnOpenNav" class="buttonType">Nav</button>
+</div>
+<div class="newFolderContainer">
+    <button class="closeCont"><img src="/icons/close.svg" alt="close"></button>  
+    <form action="/createFolder/<%= folderId %>" method="post">
+        <h3>Create Folder</h3>
+        <label for="foldername">Folder Name</label>
+        <input type="text" name="foldername" id="foldername" placeholder="my fancy folder" required>
+        <input type="submit" value="Create">
+    </form>
+</div>
+<div class="newFileContainer">
+    <button class="closeCont"><img src="/icons/close.svg" alt="close"></button> 
+    <div>
+        <form action="/mystorage/uploadfile/<%= folderId %>" method="post" enctype="multipart/form-data">
+            <h3>Upload File</h3>
+            <input type="file" name="files" id="files" multiple>
+            <input type="submit" value="Upload" id="uploadFiles">
+        </form>
+        <div class="uploading">
+            <h3>Uploading Files...</h3>
+            <img src="/icons/logo.svg" alt="logo" class="loading">
+            <i>be patient</i>
+        </div>
+    </div>
+</div>
+<div class="navContainer">
+    <button class="closeCont"><img src="/icons/close.svg" alt="close"></button> 
+    <ul class="nav">
+        <li><a href="/mystorage">My storage<% if(folderName === 'Main'){%> <img src="/icons/folder_open.svg"> <%}%></a></li>
+        <% locals.allFolders.forEach(folder => { %>
+            <% if(folder.name === 'Main') return; %>
+            <li><a href="/mystorage/folder/<%= folder.id %>"><%= folder.name %><% if(folderName === folder.name){%> <img src="/icons/folder_open.svg"> <%}%></a></li>
+        <% }) %>
+    </ul>
+</div>
+<script>
+    const btnFolder = document.querySelector('#btnNewFolder');
+    const btnFile = document.querySelector('#btnNewFile');
+    const btnNav = document.querySelector('#btnOpenNav');
+
+    const closeBtns = document.querySelectorAll('.closeCont');
+
+    const folderContainer = document.querySelector('.newFolderContainer');
+    const fileContainer = document.querySelector('.newFileContainer');
+    const navContainer = document.querySelector('.navContainer');
+
+    btnFolder.addEventListener('click', () => {
+        folderContainer.style.display = 'flex';
+    });
+
+    btnFile.addEventListener('click', () => {
+        fileContainer.style.display = 'flex';
+    });
+
+    btnNav.addEventListener('click', () => {
+        navContainer.style.display = 'flex';
+    });
+
+    closeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            btn.parentElement.style.display = 'none';
+        });
+    })
+</script>
