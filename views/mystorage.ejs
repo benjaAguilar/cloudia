@@ -47,7 +47,7 @@
     </ul>
     </div>
     <div>
-        <h2><%= folderName === 'Main' ? 'My storage' : `${folderName} Folder` %></h2>
+        <h2><%= folderName === 'Main' ? 'My storage' : folderName %><img src="/icons/folder.svg" alt="folder icon"></h2>
         <div class="foldersContainer">
         <% locals.subfolders.forEach(folder => { %>
             <div style="display: flex; margin: 1rem;">
