@@ -50,14 +50,23 @@
 
     btnFolder.addEventListener('click', () => {
         folderContainer.style.display = 'flex';
+
+        fileContainer.style.display = 'none';
+        navContainer.style.display = 'none';
     });
 
     btnFile.addEventListener('click', () => {
         fileContainer.style.display = 'flex';
+
+        folderContainer.style.display = 'none';
+        navContainer.style.display = 'none';
     });
 
     btnNav.addEventListener('click', () => {
         navContainer.style.display = 'flex';
+
+        fileContainer.style.display = 'none';
+        folderContainer.style.display = 'none';
     });
 
     closeBtns.forEach(btn => {
