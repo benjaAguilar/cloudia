@@ -64,6 +64,12 @@ header {
 h2{
     margin-top: 3rem;
     font-size: 3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    img{
+        width: 50px;
+    }
 }
 
 .foldersContainer, .filesContainer{
@@ -234,18 +240,42 @@ input[type=text], input[type=email], input[type=password]{
     display: none;
     grid-template-columns: 1fr 1fr 1fr;
     gap: 0.5rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    button{
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        img{
+            width: 20px;
+        }
+    }
 }
 
 .phoneNav2{
     width: 100%;
     display: none;
     grid-template-columns: 1fr;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    button{
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        img{
+            width: 20px;
+        }
+    }
 }
 
 @media (max-width: 750px){
     header{
         .user{
             display: none;
+        }
+
+        div, a{
+            background-color: transparent;
         }
     }
 
@@ -272,5 +302,9 @@ input[type=text], input[type=email], input[type=password]{
 
     .fileName{
         font-size: 2rem;
+    }
+
+    .nav{
+        margin-left: 1rem;
     }
 }
