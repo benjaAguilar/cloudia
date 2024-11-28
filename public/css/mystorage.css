@@ -204,3 +204,55 @@ input[type=text], input[type=email], input[type=password]{
     border-radius: 0.5rem;
     background-color: transparent;
 }
+
+.newFileContainer, .newFolderContainer, .navContainer{
+    display: none;
+    flex-direction: column;
+    gap: 0.5rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #fafafa;
+    padding: 1rem;
+    border-radius: 1rem;
+    button{
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        align-self: flex-end;
+    }
+    form{
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+}
+
+.phoneNav{
+    width: 100%;
+    display: none;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0.5rem;
+}
+
+@media (max-width: 750px){
+    header{
+        .user{
+            display: none;
+        }
+    }
+
+    h2{
+        margin-top: 1rem;
+        margin-left: 1rem;
+    }
+
+    .dashboard{
+        display: none;
+    }
+
+    .phoneNav{
+        display: grid;
+    }
+}
