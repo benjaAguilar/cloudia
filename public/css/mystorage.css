@@ -236,6 +236,12 @@ input[type=text], input[type=email], input[type=password]{
     gap: 0.5rem;
 }
 
+.phoneNav2{
+    width: 100%;
+    display: none;
+    grid-template-columns: 1fr;
+}
+
 @media (max-width: 750px){
     header{
         .user{
@@ -252,7 +258,12 @@ input[type=text], input[type=email], input[type=password]{
         display: none;
     }
 
-    .phoneNav{
+    .phoneNav, .phoneNav2{
         display: grid;
     }
+
+    .fileImage{
+        width: 150px;
+    }
+    
 }
